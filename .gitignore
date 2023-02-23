@@ -93,7 +93,6 @@ tmp
 waf3-*
 
 # Premake
-premake5.lua
 bin
 bin-int
 Essentia.vcxproj

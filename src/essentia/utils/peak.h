@@ -69,13 +69,13 @@ class Peak {
 
 // comparing by position, by default sorts by ascending position and in case
 // the positions are equal it sorts by descending magnitude
-template<typename Comp1=std::less<Real>,
-         typename Comp2=std::greater_equal<Real> >
-class ComparePeakPosition : public std::binary_function<Real, Real, bool> {
-  Comp1 _cmp1;
-  Comp2 _cmp2;
+class ComparePeakPosition {
   public:
+    template<typename Comp1=std::less<Real>,
+             typename Comp2=std::greater_equal<Real> >
     bool operator () (const Peak& p1, const Peak& p2) const {
+      Comp1 _cmp1;
+      Comp2 _cmp2;
       if (_cmp1(p1.position, p2.position)) return true;
       if (_cmp1(p2.position, p1.position)) return false;
       return _cmp2(p1.magnitude, p2.magnitude);
@@ -84,13 +84,13 @@ class ComparePeakPosition : public std::binary_function<Real, Real, bool> {
 
 // comparing by magnitude, by default sorts by descending magnitude and in case
 // the magnitudes are equal it sorts by ascending position
-template<typename Comp1=std::greater<Real>,
-         typename Comp2=std::less_equal<Real> >
-class ComparePeakMagnitude : public std::binary_function<Real, Real, bool> {
-  Comp1 _cmp1;
-  Comp2 _cmp2;
+class ComparePeakMagnitude {
   public:
+    template<typename Comp1=std::greater<Real>,
+             typename Comp2=std::less_equal<Real> >
     bool operator () (const Peak& p1, const Peak& p2) const {
+      Comp1 _cmp1;
+      Comp2 _cmp2;
       if (_cmp1(p1.magnitude, p2.magnitude)) return true;
       if (_cmp1(p2.magnitude, p1.magnitude)) return false;
       return _cmp2(p1.position, p2.position);

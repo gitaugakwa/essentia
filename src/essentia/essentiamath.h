@@ -830,11 +830,12 @@ std::vector<T> derivative(const std::vector<T>& array) {
   return result;
 }
 
-template<typename T, typename U, typename Comparator=std::greater<T> >
-class PairCompare : public std::binary_function<T, U, bool> {
-  Comparator _cmp;
+class PairCompare {
   public:
+    template<typename T, typename U, typename Comparator=std::greater<T> >
     bool operator () (const std::pair<T,U>& p1, const std::pair<T,U>& p2) const {
+      Comparator _cmp;
+
       if (_cmp(p1.first, p2.first)) return true;
       if (_cmp(p2.first, p1.first)) return false;
       return _cmp(p1.second, p2.second);
@@ -852,7 +853,7 @@ void sortpair(std::vector<T>& v1, std::vector<U>& v2) {
   std::vector<std::pair<T, U> > tmp(size);
   for (int i=0; i<size; i++)
     tmp[i] = std::make_pair(v1[i], v2[i]);
-  std::sort(tmp.begin(), tmp.end(), PairCompare<T, U, Comparator>());
+  std::sort(tmp.begin(), tmp.end(), PairCompare());
   for (int i=0; i<size; i++) {
     v1[i] = tmp[i].first;
     v2[i] = tmp[i].second;

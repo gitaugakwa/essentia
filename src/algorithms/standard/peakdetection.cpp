@@ -177,7 +177,7 @@ void PeakDetection::compute() {
     
     // iterate following an amplitude hierarchy
     std::sort(peaks.begin(), peaks.end(),
-          ComparePeakMagnitude<std::greater<Real>, std::less<Real> >());
+          ComparePeakMagnitude());
 
     size_t k = 0;
     while (k < peaks.size() - 1) {
@@ -204,7 +204,7 @@ void PeakDetection::compute() {
       // if required,sort peaks by 
       // position again
       std::sort(peaks.begin(), peaks.end(),
-                ComparePeakPosition<std::less<Real>, std::greater<Real> >());
+                ComparePeakPosition());
     }
     else if (_orderBy == "amplitude") {
       // already sorted by amplitude
@@ -220,7 +220,7 @@ void PeakDetection::compute() {
       // sort peaks by amplitude, in case of equality,
       // return the one having smaller position
       std::sort(peaks.begin(), peaks.end(),
-                ComparePeakMagnitude<std::greater<Real>, std::less<Real> >());
+                ComparePeakMagnitude());
     }
     else if (_orderBy == "position") {
       // already sorted by position

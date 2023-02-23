@@ -88,3 +88,13 @@ packaging/win32_3rdparty/include
 dist
 essentia.egg-info
 tmp
+
+# waf
+waf3-*
+
+# Premake
+premake5.lua
+bin
+bin-int
+Essentia.vcxproj
+Essentia.vcxproj.*

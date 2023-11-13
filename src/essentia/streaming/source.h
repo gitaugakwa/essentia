@@ -73,7 +73,7 @@ class Source : public SourceBase {
   }
 
 
-  std::vector<TokenType>& tokens() { return _buffer->writeView(); }
+  std::span<TokenType>& tokens() { return _buffer->writeView(); }
   TokenType& firstToken() { return _buffer->writeView()[0]; }
   const TokenType& lastTokenProduced() const { return _buffer->lastTokenProduced(); }
 

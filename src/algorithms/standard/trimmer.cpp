@@ -131,8 +131,8 @@ AlgorithmStatus Trimmer::process() {
 
 
   // get the audio input and copy it to the output
-  const vector<Real>& input = _input.tokens();
-  vector<Real>& output = _output.tokens();
+  const span<Real>& input = _input.tokens();
+  span<Real>& output = _output.tokens();
 
 
   if (_consumed >= _startIndex && _consumed < _endIndex) {

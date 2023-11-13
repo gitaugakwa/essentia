@@ -114,9 +114,9 @@ AlgorithmStatus NSGConstantQStreaming::process() {
   // Thus, here it just discards the remaining tokens. Tested with CartesianToPoolar().
   if( shouldStop() ) return FINISHED;
 
-  const std::vector<vector<std::vector<std::complex<Real> > > > &constantQ = _constantQinner.tokens();
-  const std::vector<std::vector<std::complex<Real> > >  &constantQdc = _constantQDCinner.tokens();
-  const std::vector<std::vector<std::complex<Real> > >  &constantQnf = _constantQNFinner.tokens();
+  const std::span<vector<std::vector<std::complex<Real> > > > &constantQ = _constantQinner.tokens();
+  const std::span<std::vector<std::complex<Real> > >  &constantQdc = _constantQDCinner.tokens();
+  const std::span<std::vector<std::complex<Real> > >  &constantQnf = _constantQNFinner.tokens();
 
   unsigned timeStamps = constantQ[0][0].size();
   unsigned channSize = constantQ[0].size();
@@ -131,10 +131,10 @@ AlgorithmStatus NSGConstantQStreaming::process() {
   _frameStamps.acquire();
 
 
-  std::vector<std::vector<std::complex<Real> > >& constantQout = _constantQ.tokens();
-  std::vector<std::vector<std::complex<Real> > >& constantQDCout = _constantQDC.tokens();
-  std::vector<std::vector<std::complex<Real> > >& constantQNFout = _constantQNF.tokens();
-  std::vector<int>& frameStamps = _frameStamps.tokens();
+  std::span<std::vector<std::complex<Real> > >& constantQout = _constantQ.tokens();
+  std::span<std::vector<std::complex<Real> > >& constantQDCout = _constantQDC.tokens();
+  std::span<std::vector<std::complex<Real> > >& constantQNFout = _constantQNF.tokens();
+  std::span<int>& frameStamps = _frameStamps.tokens();
 
   constantQDCout = constantQdc;
   constantQNFout = constantQnf;

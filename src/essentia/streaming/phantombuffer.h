@@ -21,6 +21,7 @@
 #define ESSENTIA_PHANTOMBUFFER_H
 
 #include <vector>
+#include <span>
 #include "multiratebuffer.h"
 #include "../roguevector.h"
 #include "../threading.h"
@@ -122,8 +123,8 @@ class PhantomBuffer : public MultiRateBuffer<T> {
    */
   ~PhantomBuffer() {}
 
-  const std::vector<T>& readView(ReaderID id) const;
-  std::vector<T>& writeView() { return _writeView; }
+  const std::span<T>& readView(ReaderID id) const;
+  std::span<T>& writeView() { return _writeView; }
 
   /**
    * This method tries to acquire the requested number of tokens. It returns true
@@ -200,7 +201,7 @@ class PhantomBuffer : public MultiRateBuffer<T> {
   std::vector<Window> _readWindow;
 
   RogueVector<T> _writeView;
-  std::vector<RogueVector<T> > _readView; // @todo CAREFUL WHEN COPYING ROGUEVECTOR...
+  std::vector<RogueVector<T>> _readView; // @todo CAREFUL WHEN COPYING ROGUEVECTOR...
 
   // threading-related & locking structures
   mutable Mutex mutex; // should be locked before any modification to the object

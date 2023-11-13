@@ -102,8 +102,8 @@ AlgorithmStatus MonoMixer::process() {
 
 
   int nChannels = _channels.lastTokenProduced();
-  const vector<StereoSample>& input = _inputAudio.tokens();
-  vector<AudioSample>& output = _outputAudio.tokens();
+  const span<StereoSample>& input = _inputAudio.tokens();
+  span<AudioSample>& output = _outputAudio.tokens();
 
   if (nChannels == 1) {
     for (int i=0; i<int(input.size()); i++) {

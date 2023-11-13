@@ -255,9 +255,9 @@ AlgorithmStatus ChromaCrossSimilarity::process() {
     return process();
   }
 
-  const std::vector<std::vector<Real> >& inputQueryFrames = _queryFeature.tokens();
-  std::vector<std::vector<Real> > inputFramesCopy = inputQueryFrames; 
-  std::vector<std::vector<Real> >& csmOutput = _csm.tokens();
+  const std::span<std::vector<Real> >& inputQueryFrames = _queryFeature.tokens();
+  std::vector<std::vector<Real> > inputFramesCopy{ inputQueryFrames.begin(), inputQueryFrames.end() };
+  std::span<std::vector<Real> >& csmOutput = _csm.tokens();
   _outputSimMatrix.clear();
 
   /* if we have less input frame streams than the required 'frameStackSize' in the last stream, 

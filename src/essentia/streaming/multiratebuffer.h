@@ -21,6 +21,7 @@
 #define ESSENTIA_MULTIRATEBUFFER_H
 
 #include <vector>
+#include <span>
 #include "../types.h"
 
 namespace essentia {
@@ -63,8 +64,8 @@ class MultiRateBuffer {
   void writerProduce(int released) { releaseForWrite(released); }
 
   // get views of the data currently being accessed to
-  virtual const std::vector<T>& readView(ReaderID id) const = 0;
-  virtual std::vector<T>& writeView() = 0;
+  virtual const std::span<T>& readView(ReaderID id) const = 0;
+  virtual std::span<T>& writeView() = 0;
 
   virtual void reset() = 0;
 

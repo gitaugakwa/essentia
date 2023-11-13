@@ -81,7 +81,8 @@ class PoolStorage : public PoolStorageBase {
 
     EXEC_DEBUG("appending tokens to pool");
     if (ntokens > 1) {
-      _pool->append(_descriptorName, _descriptor.tokens());
+      auto& tokens = _descriptor.tokens();
+      _pool->append(_descriptorName, std::vector(tokens.begin(), tokens.end()));
     }
     else {
       addToPool((StorageType)_descriptor.firstToken());

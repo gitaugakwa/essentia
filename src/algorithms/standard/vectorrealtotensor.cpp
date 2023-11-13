@@ -158,7 +158,7 @@ AlgorithmStatus VectorRealToTensor::process() {
 
   // Frames accumulation step.
   if (addPatch) {
-    const vector<vector<Real> >& frame = _frame.tokens();
+    const span<vector<Real> >& frame = _frame.tokens();
 
     // Sanity check.
     for (size_t i = 0; i < frame.size(); i++) {
@@ -170,7 +170,7 @@ AlgorithmStatus VectorRealToTensor::process() {
 
     // Add a regular patch.
     if ((int)frame.size() == _timeStamps) {
-      _acc.push_back(frame);
+      _acc.push_back(std::vector(frame.begin(), frame.end()));
 
     // If size does not match rather repeat frames or discard them.
     } else {
@@ -182,7 +182,7 @@ AlgorithmStatus VectorRealToTensor::process() {
           if (frame.size() < 10) {
             E_WARNING("VectorRealToTensor: Last patch produced by repeating the last " << frame.size() << " frames. May result in unreliable predictions.");
           }
-          vector<vector<Real> > padded_frame = frame;
+          vector<vector<Real> > padded_frame = std::vector(frame.begin(), frame.end());
 
           for (int i = 0; i < _timeStamps; i++) {
             padded_frame.push_back(frame[i % frame.size()]);

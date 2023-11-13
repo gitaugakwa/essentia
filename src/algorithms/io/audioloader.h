@@ -53,7 +53,7 @@ class AudioLoader : public Algorithm {
 
   AVFormatContext* _demuxCtx;
   AVCodecContext* _audioCtx;
-  AVCodec* _audioCodec;
+  const AVCodec* _audioCodec;
   AVPacket _packet;
   AVMD5 *_md5Encoded;
   uint8_t _checksum[16];
@@ -95,7 +95,7 @@ class AudioLoader : public Algorithm {
     _audio.setBufferType(BufferUsage::forLargeAudioStream);
 
     // Register all formats and codecs
-    av_register_all();
+    //av_register_all();
 
     // use av_malloc, because we _need_ the buffer to be 16-byte aligned
     _buffer = (float*)av_malloc(FFMPEG_BUFFER_SIZE);

@@ -78,7 +78,7 @@ void AudioLoader::openAudioFile(const string& filename) {
     // Check that we have only 1 audio stream in the file
     _streams.clear();
     for (int i=0; i<(int)_demuxCtx->nb_streams; i++) {
-        if (_demuxCtx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
+        if (_demuxCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO) {
             _streams.push_back(i);
         }
     }
@@ -99,8 +99,12 @@ void AudioLoader::openAudioFile(const string& filename) {
     _streamIdx = _streams[_selectedStream];
 
     // Load corresponding audio codec
-    _audioCtx = _demuxCtx->streams[_streamIdx]->codec;
-    _audioCodec = avcodec_find_decoder(_audioCtx->codec_id);
+    _audioCodec = avcodec_find_decoder(_demuxCtx->streams[_streamIdx]->codecpar->codec_id);
+    _audioCtx = avcodec_alloc_context3(_audioCodec);
+    //_audioCtx = _demuxCtx->streams[_streamIdx]->codec;
+    //_audioCodec = avcodec_find_decoder(_audioCtx->codec_id);
+
+    avcodec_parameters_to_context(_audioCtx, _demuxCtx->streams[_streamIdx]->codecpar);
 
     if (!_audioCodec) {
         throw EssentiaException("AudioLoader: Unsupported codec!");
@@ -161,7 +165,7 @@ void AudioLoader::closeAudioFile() {
 
     // free AVPacket
     // TODO: use a variable for whether _packet is initialized or not
-    av_free_packet(&_packet);
+    av_packet_unref(&_packet);
     _demuxCtx = 0;
     _audioCtx = 0;
     _streams.clear();
@@ -244,7 +248,7 @@ AlgorithmStatus AudioLoader::process() {
         copyFFmpegOutput();
     }
     // neds to be freed !!
-    av_free_packet(&_packet);
+    av_packet_unref(&_packet);
     
     return OK;
 }
@@ -258,10 +262,23 @@ int AudioLoader::decode_audio_frame(AVCodecContext* audioCtx,
     // _dataSize  input = number of bytes available for write in buff
     //           output = number of bytes actually written (actual: FLT data)
     //E_DEBUG(EAlgorithm, "decode_audio_frame, available bytes in buffer = " << _dataSize);
-    int gotFrame = 0;
+    int gotFrame = 1;
     av_frame_unref(_decodedFrame); //avcodec_get_frame_defaults(_decodedFrame);
 
-    int len = avcodec_decode_audio4(audioCtx, _decodedFrame, &gotFrame, packet);
+    //int len = avcodec_decode_audio4(audioCtx, _decodedFrame, &gotFrame, packet);
+    if (avcodec_send_packet(audioCtx, packet) < 0) {
+        throw EssentiaException("Error while sending audio frame");
+    };
+    auto ret = avcodec_receive_frame(audioCtx, _decodedFrame);
+    if (ret == AVERROR_EOF) {
+        gotFrame = 0;
+    }
+    else if (ret < 0) {
+        throw EssentiaException("Error while receiving audio packet");
+    }
+
+    int len = std::max(_decodedFrame->pkt_size, 0);
+
 
     if (len < 0) return len; // error handling should be done outside
 
@@ -323,7 +340,7 @@ void AudioLoader::flushPacket() {
         empty.size = 0;
 
         int len = decode_audio_frame(_audioCtx, _buffer, &_dataSize, &empty);
-        if (len < 0) {
+        if (len < 0 ) {
             char errstring[1204];
             av_strerror(len, errstring, sizeof(errstring));
             ostringstream msg;
@@ -435,7 +452,7 @@ void AudioLoader::copyFFmpegOutput() {
         throw EssentiaException("AudioLoader: could not acquire output for audio");
     }
 
-    vector<StereoSample>& audio = *((vector<StereoSample>*)_audio.getTokens());
+    span<StereoSample>& audio = *((span<StereoSample>*)_audio.getTokens());
 
     if (_nChannels == 1) {
         for (int i=0; i<nsamples; i++) {

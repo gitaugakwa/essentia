@@ -173,9 +173,9 @@ void CoverSongSimilarity::configure() {
 
 AlgorithmStatus CoverSongSimilarity::process() {
 
-  const std::vector<std::vector<Real> >& inputFrames = _inputArray.tokens();
-  std::vector<TNT::Array2D<Real> >& scoreMatrix = _scoreMatrix.tokens();
-  std::vector<Real>& distance = _distance.tokens();
+  const std::span<std::vector<Real>>& inputFrames = _inputArray.tokens();
+  std::span<TNT::Array2D<Real>>& scoreMatrix = _scoreMatrix.tokens();
+  std::span<Real>& distance = _distance.tokens();
 
   EXEC_DEBUG("process()");
   AlgorithmStatus status = acquireData();
@@ -197,7 +197,7 @@ AlgorithmStatus CoverSongSimilarity::process() {
     return process();
   }
 
-  std::vector<std::vector<Real> > inputFramesCopy = inputFrames; 
+  std::vector<std::vector<Real> > inputFramesCopy(inputFrames.begin(), inputFrames.end()); 
   /* if we have less input frame streams than the required '_minFrameSize' in the last stream, 
    we append the already acquired frames of the current stream until it satisfies the condition */
   if (input("inputArray").acquireSize() < _minFrameAcquireSize) {

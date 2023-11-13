@@ -150,8 +150,8 @@ AlgorithmStatus AudioOnsetsMarker::process() {
     return CONTINUE;
   }
 
-  const vector<Real>& input = _input.tokens();
-  vector<Real>& output = _output.tokens();
+  const span<Real>& input = _input.tokens();
+  span<Real>& output = _output.tokens();
 
   assert(output.size() == input.size());
 

@@ -140,8 +140,8 @@ AlgorithmStatus Resample::process() {
 
   EXEC_DEBUG("data acquired");
 
-  const vector<AudioSample>& signal = _signal.tokens();
-  vector<AudioSample>& resampled = _resampled.tokens();
+  const span<AudioSample>& signal = _signal.tokens();
+  span<AudioSample>& resampled = _resampled.tokens();
 
   EXEC_DEBUG("signal size:" << signal.size());
   EXEC_DEBUG("resampled size:" << resampled.size());

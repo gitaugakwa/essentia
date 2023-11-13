@@ -20,35 +20,35 @@
 #ifndef ESSENTIA_ROGUEVECTOR_H
 #define ESSENTIA_ROGUEVECTOR_H
 
-#include <vector>
+#include <span>
 #include "types.h"
 
 namespace essentia {
 
 
 template <typename T>
-class RogueVector : public std::vector<T> {
+class RogueVector : public std::span<T, std::dynamic_extent> {
  protected:
   bool _ownsMemory;
 
  public:
-  RogueVector(T* tab = 0, size_t size = 0) : std::vector<T>(), _ownsMemory(false) {
-    setData(tab);
-    setSize(size);
+  RogueVector(T* tab = 0, size_t size = 0) : std::span<T, std::dynamic_extent>(tab, size), _ownsMemory(false) {
+    //setData(tab);
+    //setSize(size);
   }
 
-  RogueVector(uint size, T value) : std::vector<T>(size, value), _ownsMemory(true) {}
+  //RogueVector(uint size, T value) : std::vector<T>(size, value), _ownsMemory(true) {}
 
-  RogueVector(const RogueVector<T>& v) : std::vector<T>(), _ownsMemory(false) {
-    setData(const_cast<T*>(v.data()));
-    setSize(v.size());
+  RogueVector(const RogueVector<T>& v) : std::span<T, std::dynamic_extent>(v), _ownsMemory(false) {
+    //setData(const_cast<T*>(v.data()));
+    //setSize(v.size());
   }
 
   ~RogueVector() {
-    if (!_ownsMemory) {
+   /* if (!_ownsMemory) {
       setData(0);
       setSize(0);
-    }
+    }*/
   }
 
   // Those need to be implementation specific
@@ -89,13 +89,13 @@ void RogueVector<T>::setSize(size_t size) {
 
 template <typename T>
 void RogueVector<T>::setData(T* data) {
-    this->assign(data, (T*)(data + this->size()));
+    (*this) = RogueVector(data, this->size());
   //this->_Myfirst() = data;
 }
 
 template <typename T>
 void RogueVector<T>::setSize(size_t size) {
-    this->resize(size);
+    (*this) = RogueVector(this->data(), size);
   //this->_Mylast() = this->_Myfirst() + size;
   //this->_Myend() = this->_Myfirst() + size;
 }

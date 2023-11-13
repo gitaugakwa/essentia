@@ -56,9 +56,9 @@ AlgorithmStatus StereoDemuxer::process() {
     return process();
   }
 
-  const vector<StereoSample>& audio = _audio.tokens();
-  vector<AudioSample>& left = _left.tokens();
-  vector<AudioSample>& right = _right.tokens();
+  const span<StereoSample>& audio = _audio.tokens();
+  span<AudioSample>& left = _left.tokens();
+  span<AudioSample>& right = _right.tokens();
 
   for (int i=0; i<(int)audio.size(); i++) {
     left[i] = audio[i].left();

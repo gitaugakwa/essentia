@@ -26,7 +26,7 @@ namespace essentia {
 namespace streaming {
 
 template <typename T>
-const std::vector<T>& PhantomBuffer<T>::readView(ReaderID id) const {
+const std::span<T>& PhantomBuffer<T>::readView(ReaderID id) const {
   return _readView[id];
 }
 
@@ -201,6 +201,7 @@ template <typename T>
 inline void PhantomBuffer<T>::updateReadView(ReaderID id) {
   const RogueVector<T>& vconst = static_cast<const RogueVector<T>&>(readView(id));
   RogueVector<T>& v = const_cast<RogueVector<T>&>(vconst);
+  //v = std::span(&_buffer[0] + _readWindow[id].begin, _readWindow[id].end - _readWindow[id].begin);
   v.setData(&_buffer[0] + _readWindow[id].begin);
   v.setSize(_readWindow[id].end - _readWindow[id].begin);
 }

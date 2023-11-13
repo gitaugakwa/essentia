@@ -1,7 +1,7 @@
 project "Essentia"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -15,21 +15,24 @@ project "Essentia"
 		"src/essentia/streaming",
 		"src/essentia/streaming/algorithms",
 		"src/essentia/utils",
-		"../eigen",
-		"src/3rdparty",
-		"src/3rdparty/cephes",
-		"src/3rdparty/kiss_fft130",
+		-- "src/3rdparty",
+		-- "src/3rdparty/cephes",
+		-- "src/3rdparty/kiss_fft130",
 		"src/3rdparty/nnls",
 		"src/3rdparty/spline",
-		"src/3rdparty/tensorflow",
-		"src/3rdparty/vamp-plugin-sdk-2.4",
-		"packaging/win32_3rdparty/include",
-		"packaging/win32_3rdparty/include/taglib",
+		-- "src/3rdparty/tensorflow",
+		-- "src/3rdparty/vamp-plugin-sdk-2.4",
+		"vcpkg_installed/x64-windows/include",
+		"vcpkg_installed/x64-windows/include/taglib",
+		-- "packaging/win32_3rdparty/include",
+		-- "packaging/win32_3rdparty/include/taglib",
+
 	}
 
 	files
 	{
 		"src/algorithms/**/*.cpp",
+		"src/algorithms/essentia_algorithms_reg.cpp",
 		-- "src/3rdparty/**/*.cpp",
 		"src/3rdparty/spline/*.cpp",
 		"src/3rdparty/nnls/*.c",
@@ -40,7 +43,6 @@ project "Essentia"
 		"src/essentia/utils/*.cpp",
 		"src/essentia/algorithm.cpp",
 		"src/essentia/essentia.cpp",
-		"src/algorithms/essentia_algorithms_reg.cpp",
 		"src/essentia/connector.cpp",
 		"src/essentia/debugging.cpp",
 		"src/essentia/parameter.cpp",
@@ -72,18 +74,19 @@ project "Essentia"
 		"_HAS_STD_BYTE=0",
 	}
 
-	undefines
-	{
-	}
-
 	links
 	{
-		"packaging/win32_3rdparty/lib/fftw3f.lib",
-		"packaging/win32_3rdparty/lib/libfftw3f-3.dll",
-		"packaging/win32_3rdparty/lib/avutil.lib",
-		"packaging/win32_3rdparty/lib/avcodec.lib",
-		"packaging/win32_3rdparty/lib/avformat.lib",
-		"packaging/win32_3rdparty/lib/swresample.lib",
+		"vcpkg_installed/x64-windows/lib/fftw3f.lib",
+		"vcpkg_installed/x64-windows/lib/samplerate.lib",
+		"vcpkg_installed/x64-windows/lib/avcodec.lib",
+		"vcpkg_installed/x64-windows/lib/avformat.lib",
+		"vcpkg_installed/x64-windows/lib/avutil.lib",
+		"vcpkg_installed/x64-windows/lib/swresample.lib",
+	}
+
+	linkoptions
+	{
+		
 	}
 
 	filter "system:windows"

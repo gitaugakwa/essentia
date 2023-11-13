@@ -1,0 +1,39 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/master/docs/vcpkg.schema.json",
+  "builtin-baseline": "f3a39f1aaffe48b1190df69aab3a8657f91b632a",
+  "name": "essentia",
+  "version": "1.0",
+  "vcpkg-configuration": { "overlay-triplets": [] },
+  "dependencies": [
+    {
+      "name": "ffmpeg",
+      "features": [
+        "mp3lame",
+        "swresample",
+        "swscale",
+        "avresample",
+        "avformat",
+        "avfilter",
+        "avdevice",
+        "avcodec"
+      ]
+    },
+    { "name": "fftw3", "features": ["sse2"] },
+    { "name": "mp3lame" },
+    { "name": "libsamplerate" },
+    { "name": "libyaml" },
+    { "name": "chromaprint" },
+    { "name": "zlib" },
+    { "name": "taglib" },
+    { "name": "eigen3" }
+  ],
+  "overrides": [
+    {
+      "name": "ffmpeg",
+      "version": "5.1.2"
+    },
+    { "name": "mp3lame", "version": "3.100" },
+    { "name": "fftw3", "version": "3.3.9" },
+    { "name": "libsamplerate", "version": "0.2.2" }
+  ]
+}

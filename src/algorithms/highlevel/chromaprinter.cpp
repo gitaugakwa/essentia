@@ -155,10 +155,10 @@ AlgorithmStatus Chromaprinter::process() {
       return process();
     }
 
-    const vector<Real>& signal = _signal.tokens();
+    const span<Real>& signal = _signal.tokens();
 
     // Copy the signal to new vector to expand it to the int16_t dynamic range before the cast.
-    std::vector<Real> signalScaled = signal;
+    std::vector<Real> signalScaled = std::vector(signal.begin(), signal.end());
     std::transform(signalScaled.begin(), signalScaled.end(), signalScaled.begin(),
                    std::bind(std::multiplies<Real>(), pow(2,15), std::placeholders::_1));
 
@@ -176,7 +176,7 @@ AlgorithmStatus Chromaprinter::process() {
       if (_returnChromaprint) {
         // Only acquires tokens when we want to output the chromaprint.
         _fingerprint.acquire(1);
-        std::vector<std::string>& fingerprint = _fingerprint.tokens();
+        std::span<std::string>& fingerprint = _fingerprint.tokens();
         fingerprint[0] = fingerprintConcatenated;
         _fingerprint.release();
         fingerprintConcatenated.erase();

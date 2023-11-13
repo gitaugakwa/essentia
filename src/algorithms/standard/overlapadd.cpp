@@ -26,7 +26,7 @@ using namespace std;
 namespace essentia {
 
 void processFrame(vector<Real>& tmpFrame, const vector<Real>& windowedFrame,
-                  vector<Real>& output, vector<Real> &frameHistory,
+                  span<Real>& output, vector<Real> &frameHistory,
                   const int& _frameSize, const int& _hopSize, const float& normalizationGain) {
 
   bool _zeroPhase = true;
@@ -112,8 +112,9 @@ void OverlapAdd::compute() {
   if (windowedFrame.empty()) throw EssentiaException("OverlapAdd: the input frame is empty");
 
   output.resize(_hopSize);
+  std::span outputSpan(output);
 
-  processFrame(_tmpFrame, windowedFrame, output, _frameHistory, _frameSize,
+  processFrame(_tmpFrame, windowedFrame, outputSpan, _frameHistory, _frameSize,
                _hopSize, _normalizationGain);
 
 }
@@ -162,8 +163,8 @@ AlgorithmStatus OverlapAdd::process() {
     return CONTINUE;
   }
 
-  const vector<vector<Real> >& frames = _frames.tokens();
-  vector<Real>& output = _output.tokens();
+  const span<vector<Real> >& frames = _frames.tokens();
+  span<Real>& output = _output.tokens();
 
   assert(frames.size() == 1 && (int) output.size() == _hopSize);
   const vector<Real> & windowedFrame = frames[0];

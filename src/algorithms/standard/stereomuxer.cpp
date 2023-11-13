@@ -57,9 +57,9 @@ AlgorithmStatus StereoMuxer::process() {
     return process();
   }
 
-  const vector<AudioSample>& left = _left.tokens();
-  const vector<AudioSample>& right = _right.tokens();
-  vector<StereoSample>& audio = _audio.tokens();
+  const span<AudioSample>& left = _left.tokens();
+  const span<AudioSample>& right = _right.tokens();
+  span<StereoSample>& audio = _audio.tokens();
 
   for (int i=0; i<(int)left.size(); i++) {
     // TODO make sure left.size() always match right.size()

@@ -15,10 +15,11 @@ cd eigen-$EIGEN_VERSION
 mkdir build
 cd build
 
-cmake ../ -DCMAKE_INSTALL_PREFIX=$PREFIX
-make install
+cmake ../ -DCMAKE_INSTALL_PREFIX=$PREFIX -DEIGEN_BUILD_PKGCONFIG=ON
+# make install
+msbuild INSTALL.vcxproj
 mkdir -p "$PREFIX"/lib/pkgconfig/
-cp "$PREFIX"/share/pkgconfig/eigen3.pc "$PREFIX"/lib/pkgconfig/
+cp eigen3.pc "$PREFIX"/lib/pkgconfig/
 
 cd ../../..
 rm -rf tmp

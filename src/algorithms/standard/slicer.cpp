@@ -167,7 +167,7 @@ AlgorithmStatus Slicer::process() {
   }
 
   // we are copying a slice, get the audio input and copy it to the output
-  const vector<Real>& input = _input.tokens();
+  const span<Real>& input = _input.tokens();
   vector<Real>& output = _output.firstToken();
 
   assert((int)input.size() == _input.acquireSize());

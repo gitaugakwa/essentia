@@ -122,9 +122,9 @@ AlgorithmStatus FalseStereoDetector::process() {
     return process();
   }
 
-  const vector<StereoSample>& audio = _audio.tokens();
-  vector<int>& isFalseStereo = _isFalseStereo.tokens();
-  vector<Real>& correlation = _correlation.tokens();
+  const span<StereoSample>& audio = _audio.tokens();
+  span<int>& isFalseStereo = _isFalseStereo.tokens();
+  span<Real>& correlation = _correlation.tokens();
 
   _FalseStereoDetectorAlgo->input("frame").set(audio);
   _FalseStereoDetectorAlgo->output("isFalseStereo").set(isFalseStereo[0]);

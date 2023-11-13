@@ -93,7 +93,8 @@ AlgorithmStatus MonoWriter::process() {
   }
 
   try {
-    _audioCtx.write(_audio.tokens());
+    auto& tokens = _audio.tokens();
+    _audioCtx.write(std::vector(tokens.begin(), tokens.end()));
   }
   catch (EssentiaException& e) {
     throw EssentiaException("MonoWriter: error writing to audio file: ", e.what());

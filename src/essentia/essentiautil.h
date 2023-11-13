@@ -21,6 +21,7 @@
 #define ESSENTIA_UTILS_H
 
 #include <vector>
+#include <span>
 #include <cctype>
 #include <string>
 #include <cmath> // isinf, isnan
@@ -129,6 +130,7 @@ inline bool isValid(const Tuple2<T>& value) {
 }
 
 inline bool isValid(const std::string& s) {
+  s;
   // at the moment all strings are valid
   return true;
 }
@@ -176,8 +178,8 @@ int mkstemp(char *tmpl);
  * This function, which has the same interface as memcpy, performs either memcpy (fast)
  * for basic types, or does a simple copy element by element (for strings, for instance).
  */
-template <typename T>
-inline void fastcopy(T* dest, const T* src, int n) {
+template <typename TDest, typename TSrc = TDest>
+inline void fastcopy(TDest* dest, const TSrc* src, int n) {
   for (int i=0; i<n; i++) {
     *dest++ = *src++;
   }
@@ -206,7 +208,33 @@ inline void fastcopy(std::vector<Real>::iterator dest, std::vector<Real>::const_
   }
 }
 
+inline void fastcopy(std::vector<Real>::iterator dest, std::span<Real>::iterator src, int n) {
+  // need to test this because otherwise it is not legal to dereference the iterator
+  if (n > 0) {
+    fastcopy(&*dest, &*src, n);
+  }
+}
+
+inline void fastcopy(std::span<Real>::iterator dest, std::span<Real>::iterator src, int n) {
+  // need to test this because otherwise it is not legal to dereference the iterator
+  if (n > 0) {
+    fastcopy(&*dest, &*src, n);
+  }
+}
+
 inline void fastcopy(std::vector<StereoSample>::iterator dest, std::vector<StereoSample>::const_iterator src, int n) {
+  if (n > 0) {
+    fastcopy(&*dest, &*src, n);
+  }
+}
+
+inline void fastcopy(std::vector<StereoSample>::iterator dest, std::span<StereoSample>::iterator src, int n) {
+  if (n > 0) {
+    fastcopy(&*dest, &*src, n);
+  }
+}
+
+inline void fastcopy(std::span<StereoSample>::iterator dest, std::span<StereoSample>::iterator src, int n) {
   if (n > 0) {
     fastcopy(&*dest, &*src, n);
   }

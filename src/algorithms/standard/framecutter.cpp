@@ -329,7 +329,7 @@ AlgorithmStatus FrameCutter::process() {
   typedef vector<AudioSample> Frame;
 
   // get the audio input and copy it as a frame to the output
-  const vector<AudioSample>& audio = _audio.tokens();
+  const span<AudioSample>& audio = _audio.tokens();
   Frame& frame = _frames.firstToken();
 
 

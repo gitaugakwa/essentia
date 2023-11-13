@@ -131,8 +131,8 @@ AlgorithmStatus StereoTrimmer::process() {
 
 
   // get the audio input and copy it to the output
-  const vector<StereoSample>& input = _input.tokens();
-  vector<StereoSample>& output = _output.tokens();
+  const span<StereoSample>& input = _input.tokens();
+  span<StereoSample>& output = _output.tokens();
 
 
   if (_consumed >= _startIndex && _consumed < _endIndex) {

@@ -92,6 +92,8 @@ tmp
 # waf
 waf3-*
 
+vcpkg_installed
+
 # Premake
 bin
 bin-int

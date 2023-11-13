@@ -70,7 +70,7 @@ AlgorithmStatus RingBufferInput::process() {
     return status;
   }
 
-  vector<AudioSample>& outputSignal = _output.tokens();
+  span<AudioSample>& outputSignal = _output.tokens();
   AudioSample* outputData = &(outputSignal[0]);
   int outputSize = outputSignal.size();
 
